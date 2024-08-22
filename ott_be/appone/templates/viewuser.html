@@ -1,0 +1,103 @@
+{% extends 'layout/app_layout.html' %}
+{% block 'content' %}
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h1>User Details</h1>
+    </div>
+    <br><br><br>
+    
+    <div>
+        <div class="d-flex justify-content-center">
+            <p class="fs-4">Name: {{ user.user_name }}</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p class="fs-4">Email: {{ user.email }} </p>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-4">
+            <div class="d-flex justify-content-center">
+                <h4>Watch History</h4>
+            </div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Movie Name</th>
+                        <th>Date Watched</th>
+                        <th>Time Watched</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for watch in watch_history_page_obj %}
+                    <tr>
+                        <td>{{ watch.movie_id.movie_name }}</td>
+                        <td>{{ watch.date_time.date }}</td>
+                        <td>{{ watch.date_time.time }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No record found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center">
+                {% if watch_history_page_obj.has_previous %}
+                    <a href="?watch_page={{ watch_history_page_obj.previous_page_number }}" style="margin-right: 5px; margin-left: 5px;">&laquo; Previous</a>
+                {% endif %}
+
+                <span style="margin-right: 5px; margin-left: 5px;">Page {{ watch_history_page_obj.number }} of {{ watch_history_page_obj.paginator.num_pages }}</span>
+
+                {% if watch_history_page_obj.has_next %}
+                    <a href="?watch_page={{ watch_history_page_obj.next_page_number }}" style="margin-right: 5px; margin-left: 5px;">Next &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-1">
+            <p></p>
+        </div>
+
+        <div class="col-4">
+            <div class="d-flex justify-content-center">
+                <h4>Subscription History</h4>
+            </div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Plan Name</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscription in subscription_page_obj %}
+                    <tr>
+                        <td>{{ subscription.plan_id.plan_name }}</td>
+                        <td>{{ subscription.date }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No record found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+            <div class="d-flex justify-content-center">
+                {% if subscription_page_obj.has_previous %}
+                    <a href="?subscription_page={{ subscription_page_obj.previous_page_number }}" style="margin-right: 5px; margin-left: 5px;">&laquo; Previous</a>
+                {% endif %}
+        
+                <span style="margin-right: 5px; margin-left: 5px;">Page {{ subscription_page_obj.number }} of {{ subscription_page_obj.paginator.num_pages }}</span>
+        
+                {% if subscription_page_obj.has_next %}
+                    <a href="?subscription_page={{ subscription_page_obj.next_page_number }}" style="margin-right: 5px; margin-left: 5px;">Next &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

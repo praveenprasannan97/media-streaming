@@ -1,0 +1,32 @@
+{% extends 'layout/app_layout.html' %}
+{% block 'content' %}
+<div class="container col-6 mt-4">
+    <div class="d-flex justify-content-center">
+        <h1>Edit Movies</h1>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="fs-5" for="mtitle">Movie Title</label>
+        <input type="text" style="width: 100%;" id="mtitle" name="movie_name" class="form-control" value="{{ movie.movie_name }}">
+        <div class="form-group">
+            <label class="fs-5" for="description">Description</label>
+            <textarea id="description" class="form-control" name="movie_description" rows="5">{{ movie.movie_description }}</textarea>
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+            <label class="fs-5" for="movie-thumb">Movie Thumbnail image</label>
+            <input id="movie-thumb" class="form-control-file" type="file" name="movie_thumbnail">
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="fs-5" for="movie-file">Movie Source File</label>
+            <input id="movie-file" class="form-control-file" type="file" name="movie_video">
+        </div>
+        <br>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

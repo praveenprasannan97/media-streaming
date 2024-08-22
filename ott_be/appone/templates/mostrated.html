@@ -1,0 +1,46 @@
+{% extends 'layout/app_layout.html' %}
+{% block 'content' %}
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h1>Most Rated</h1>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <div class="row d-flex justify-content-center">
+      <div class="col-6">
+        <table class="table table-bordered table-striped table-hover mt-3">
+          <thead>
+            <tr>
+              <th style="width: 60%; text-align: center;">Movie</th>
+              <th style="width: 40%; text-align: center;">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for movie in page_obj %}
+            <tr>
+                <td>{{ movie.movie_name }}</td>
+                <td>{{ movie.movie_rating }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+          {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }} " style="margin-right: 5px; margin-left: 5px;">&laquo; Previous</a>
+          {% endif %}
+  
+          <span style="margin-right: 5px; margin-left: 5px;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  
+          {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" style="margin-right: 5px; margin-left: 5px;">Next &raquo;</a>
+          {% endif %}
+      </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

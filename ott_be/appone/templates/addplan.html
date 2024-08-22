@@ -1,0 +1,33 @@
+{% extends 'layout/app_layout.html' %}
+{% block 'content' %}
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h1>Add New Plan</h1>
+    </div>
+    <br><br><br><br>
+    <div class="row d-flex justify-content-center">
+        <div class="col-6">
+            <div class="container-fluid">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label class="fs-5" for="pname">Plan Name</label>
+                    <input type="text" style="width: 100%;" id="pname" name="plan_name">
+                    <div class="form-group">
+                        <label class="fs-5" for="my-textarea">Description</label>
+                        <textarea id="my-textarea" class="form-control" name="plan_description" rows="5"></textarea>
+                    </div>
+                    <label class="fs-5" for="duration">Duration in days</label>
+                    <input type="number" style="width: 100%;" id="duration" name="plan_duration">
+                    <label class="fs-5" for="price">Price</label>
+                    <input type="number" style="width: 100%;" id="price" name="plan_price">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary mt-3" type="submit">Add Plan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

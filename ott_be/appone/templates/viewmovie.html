@@ -1,0 +1,43 @@
+{% extends 'layout/app_layout.html' %}
+{% block 'content' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h1>Movie Details</h1>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="row d-flex justify-content-center">
+        <div class=" col-10 container">
+            <div class="row">
+                <div class="col-6">
+                    <p class="fs-4">Movie Name</p>
+                    <h2>{{ movie.movie_name }}</h2>
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="fs-4">Thumbnail</p>
+                            <img src="{{ movie.movie_thumbnail.url }}" style="width: 150px; height: 200px;">
+                        </div>
+                        <div class="col-6">
+                            <p class="fs-4">Description</p>
+                            <p>{{ movie.movie_description }}</p>
+                            <p class="fs-4">Rating</p>
+                            <p>{{ movie.movie_rating }}  <i class="fa fa-star"></i></p>
+                            <p class="fs-4">View Count</p>
+                            <p>{{ movie.movie_views }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <video controls style="max-width: 100%;">
+                <source src="{{ movie.movie_video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</div>
+{% endblock %}
