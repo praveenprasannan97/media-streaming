@@ -1,4 +1,3 @@
-
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.views.decorators.csrf import csrf_exempt
@@ -15,9 +14,14 @@ from django.db.models import Q
 from rest_framework import status, exceptions, authentication
 from rest_framework import generics, filters
 from appone.models import Subusers, movie_list, plans, watch_history, watch_later, subscription
-from .serializers import UserSerializer, MovieDetailsSerializer, PlansSerializer, SubscriptionSerializer
+from .serializers import UserSerializer, MovieDetailsSerializer, PlansSerializer, SubscriptionSerializer, RazorpaySerializer
+from django.conf import settings
 from .forms import ApiSignup
 import random
+import razorpay
+from datetime import datetime
+
+client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 # @csrf_exempt
 @api_view(['POST'])
@@ -226,3 +230,37 @@ def myplan(request):
     user_subscriptions = subscription.objects.filter(user_id=user).order_by('-date')
     serializer = SubscriptionSerializer(user_subscriptions, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def plan_order(request):
+    email = request.data.get('email')
+    plan_id = request.data.get('plan_id')
+    user = Subusers.objects.get(email=email)
+    sel_plan = plans.objects.get(pk=plan_id)
+    price = sel_plan.plan_price * 100
+    receipt = "receipt"+ str(user.id) + datetime.now().strftime('%Y%m%d%H%M%S')
+    DATA = {
+            "amount": int(price),
+            "currency": "INR",
+            "receipt": receipt,
+            "notes": {
+                "userid": str(user.id),
+                "planid": str(sel_plan.id)
+                }
+        }
+    order_details = client.order.create(data=DATA)
+    serializer = RazorpaySerializer(data = order_details)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def purchase(request):
+    payment_id = request.data.get('razorpay_payment_id')
+    order_id = request.data.get('razorpay_order_id')
+    signature = request.data.get('razorpay_signature')
+    print(payment_id,order_id,signature)
+    
+    return Response(status=status.HTTP_200_OK)

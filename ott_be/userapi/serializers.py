@@ -26,3 +26,8 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = subscription
         fields = ['plan_name', 'plan_description', 'plan_price', 'plan_duration', 'date', 'expiry']
+
+
+class RazorpaySerializer(serializers.Serializer):
+    id = serializers.CharField()
+    amount = serializers.IntegerField()

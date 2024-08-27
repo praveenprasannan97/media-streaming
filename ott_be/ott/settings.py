@@ -98,7 +98,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'movie_time_2',        #Name of the database created for this project
-        'USER': '',                    #Enter your mysql username
+        'USER': 'root',                #Enter your mysql username
         'PASSWORD': '',                #Enter your mysql password
         'HOST': 'localhost',
         'PORT': '3306',
@@ -154,7 +154,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = ''                #add your email provider
+EMAIL_HOST = ''      #add your email provider
 EMAIL_HOST_USER = ''           #add your user for email
 EMAIL_HOST_PASSWORD = ''       #add your email host password
 EMAIL_PORT = '2525'
@@ -167,3 +167,9 @@ LOGIN_URL = '/'
 # for React
 # CORS_ORIGIN_WHITELIST = True
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+#razorpay
+
+RAZOR_KEY_ID = ''       #razorpay id
+RAZOR_KEY_SECRET = ''   #razorpay api key

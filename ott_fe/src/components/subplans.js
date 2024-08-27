@@ -9,15 +9,66 @@ import { useEffect } from 'react';
 
 function Subplans(){
     var user = useSelector(store=>store.auth.user);
+    var [order, setOrder]=useState([]);
     var [plans, setPlans]=useState([]);
     useEffect(()=>{
         fetchPlan()
-    },[])
+        console.log(order)
+    },[order])
     function fetchPlan(){
         axios.post('http://127.0.0.1:8000/api/viewplans/',{},{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
             setPlans(response.data)
         })
     }
+
+    function plan_order(email,plan_id){
+        axios.post('http://127.0.0.1:8000/api/planorder/',{email,plan_id},{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
+            setOrder(response.data);
+            initiateRazorpayPayment(response.data);
+        })
+    }
+    function initiateRazorpayPayment(orderDetails){
+        var options = {
+            "key": "", // Enter the Key ID generated from the Dashboard
+            "amount": orderDetails.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": orderDetails.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature);
+                axios.post('http://127.0.0.1:8000/api/purchase/',{razorpay_payment_id:response.razorpay_payment_id,razorpay_order_id:response.razorpay_order_id,razorpay_signature:response.razorpay_signature}
+                    ,{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
+                    console.log('axios purchase verify')
+                })
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new window.Razorpay(options);
+        rzp1.open('payment.failed', function (response){
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
+    }
+
     return(
         <div className="app" style={{ backgroundImage: `url(${bgi})` }}>
             <Navbar2/>
@@ -37,10 +88,10 @@ function Subplans(){
                             <div className="card-body">
                                 <p className="card-text" height={'10%'} >{plan.plan_description}</p>
                                 <p>{plan.plan_duration} Days</p>
-                                <p>{plan.plan_price} </p>
+                                <p>{plan.plan_price} ₹</p>
                             </div>
                             <div className='card-footer'>
-                            <a className='btn btn-outline-primary'>Subscribe</a>
+                            <a className='btn btn-outline-primary' onClick={() => plan_order(user.email, plan.id)}>Subscribe</a>
                             </div>
                         </div>
                     </div>

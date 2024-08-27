@@ -60,9 +60,10 @@ class subscription(models.Model):
     user_id = models.ForeignKey(Subusers, on_delete=models.CASCADE)
     plan_id = models.ForeignKey(plans, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
-    payment_status = models.CharField(max_length=50)
+    payment_status = models.CharField(max_length=50, default = "false")
     transaction_id = models.CharField(max_length=150)
     expiry = models.DateField()
+    order_id = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"{self.user_id.user_name} - {self.plan_id.plan_name}"

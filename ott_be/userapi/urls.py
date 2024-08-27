@@ -19,4 +19,6 @@ urlpatterns = [
     path('watchlater/', views.watchlater, name='apiwatchlater'),
     path('addwatchlater/', views.addwatchlater, name='apiaddwatchlater'),
     path('delwatchlater/', views.delwatchlater, name='apidelwatchlater'),
+    path('planorder/', views.plan_order, name='apiorderplan'),
+    path('purchase/', views.purchase, name='purchase'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
