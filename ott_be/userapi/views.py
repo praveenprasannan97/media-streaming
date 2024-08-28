@@ -152,8 +152,7 @@ def playmovie(request):
             movie.movie_views = 0
         movie.movie_views += 1
         movie.save()
-     serializer = MovieDetailsSerializer(movies, many = True)
-     return Response(serializer.data)
+     return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -250,6 +249,7 @@ def plan_order(request):
                 }
         }
     order_details = client.order.create(data=DATA)
+    print(order_details)
     serializer = RazorpaySerializer(data = order_details)
     if serializer.is_valid():
         return Response(serializer.data, status=status.HTTP_200_OK)

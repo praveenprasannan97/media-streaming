@@ -2,7 +2,7 @@ import Navbar2 from './navbar2';
 import bgi from '../images/bg.jpg';
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import checkAuth from '../store/checkAuth';
 import axios from 'axios';
 
@@ -10,13 +10,14 @@ function Playmovie(){
     var user = useSelector(store => store.auth.user);
     const { moviepk } = useParams();
     const [movies, setMovies] = useState([]);
+    const [hasStarted, setHasStarted] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
         fetchMovies();
     }, [user.token]);   // [moviepk, user.token]);
 
     function fetchMovies() {
-        axios.post('http://127.0.0.1:8000/api/playmovie/', { moviepk }, {
+        axios.post('http://127.0.0.1:8000/api/viewmovie/', { moviepk }, {
             headers: {
                 'Authorization': `Token ${user.token}`,
                 'Content-Type': 'application/json',
@@ -33,6 +34,17 @@ function Playmovie(){
             }
         });
     }
+    function handleVideoPlay() {
+        if (!hasStarted) {
+            setHasStarted(true);
+            axios.post('http://127.0.0.1:8000/api/playmovie/', { moviepk }, {
+                headers: {
+                    'Authorization': `Token ${user.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+        }
+    }
 
     return(
         <div className="app" style={{ backgroundImage: `url(${bgi})` }}>
@@ -43,7 +55,7 @@ function Playmovie(){
             </div>
             <br></br>
             <div className="d-flex justify-content-center">
-                <video width="1280" height="720" controls>
+                <video width="1280" height="720" controls onPlay={handleVideoPlay}>
                 {movies.length > 0 && <source src={`http://127.0.0.1:8000/${movies[0].movie_video}`}  type="video/mp4"/>}
                     Your browser does not support the video tag.
                 </video> 
