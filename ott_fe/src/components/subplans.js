@@ -26,7 +26,7 @@ function Subplans(){
             setOrder(response.data);
             initiateRazorpayPayment(response.data);
         })
-    }
+    } 
     function initiateRazorpayPayment(orderDetails){
         var options = {
             "key": "", // Enter the Key ID generated from the Dashboard

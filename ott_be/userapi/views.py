@@ -23,7 +23,7 @@ from datetime import datetime
 
 client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
-# @csrf_exempt
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def apisignup(request):
@@ -61,6 +61,7 @@ def apilogin(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def apilogout(request):
     user = request.user
     token = Token.objects.get(user=user)
@@ -109,6 +110,7 @@ def apipassreset(request):
     
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def apichangepass(request):
     email = request.data.get('email')
     password = request.data.get('password')
@@ -122,6 +124,7 @@ def apichangepass(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def movielist(request):
      searchquery =request.data.get('searchquery')
      if searchquery is None:
@@ -135,6 +138,7 @@ def movielist(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def viewmovie(request):
      pk = request.data.get('moviepk')
      movies = movie_list.objects.filter(pk=pk).order_by('movie_name')
@@ -143,6 +147,7 @@ def viewmovie(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def playmovie(request):
      pk = request.data.get('moviepk')
      movies = movie_list.objects.filter(pk=pk)
@@ -156,6 +161,7 @@ def playmovie(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def subplans(request):
      available_plans = plans.objects.filter(plan_status = 'true').order_by('plan_price')
      serializer = PlansSerializer(available_plans, many = True)
@@ -163,6 +169,7 @@ def subplans(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def watchhistory(request):
      email = request.data.get('email')
      if Subusers.objects.filter(email=email).exists():
@@ -178,6 +185,7 @@ def watchhistory(request):
    
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def watchlater(request):
      email = request.data.get('email')
      if Subusers.objects.filter(email=email).exists():
@@ -193,6 +201,7 @@ def watchlater(request):
      
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def addwatchlater(request):
     email = request.data.get('email')
     movie_id = request.data.get('movie_id')
@@ -207,6 +216,7 @@ def addwatchlater(request):
     
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def delwatchlater(request):
     email = request.data.get('email')
     movie_id1 = request.data.get('movie_id')
@@ -223,6 +233,7 @@ def delwatchlater(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def myplan(request):
     email = request.user.email
     user = Subusers.objects.get(email=email)
@@ -232,6 +243,7 @@ def myplan(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def plan_order(request):
     email = request.data.get('email')
     plan_id = request.data.get('plan_id')
@@ -257,6 +269,7 @@ def plan_order(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def purchase(request):
     payment_id = request.data.get('razorpay_payment_id')
     order_id = request.data.get('razorpay_order_id')

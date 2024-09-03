@@ -18,6 +18,7 @@ function MovieList(){
 
 
     function fetchMovies(){
+        if (!user) return;
         axios.post('http://127.0.0.1:8000/api/movielist/',{},{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
             setMovies(response.data)
             setLoading(false);
@@ -31,7 +32,7 @@ function MovieList(){
     }
     useEffect(()=>{
         fetchMovies()
-    },[])
+    })
 
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;

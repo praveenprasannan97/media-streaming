@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { setUser } from '../store/authSlice';
 import { useDispatch } from "react-redux";
+import checkGuest from '../store/checkGuest';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -61,4 +62,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default checkGuest(Login);
