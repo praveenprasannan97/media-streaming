@@ -14,6 +14,7 @@ function Myplan() {
     }, []);
 
     function fetchPlans() {
+        if (!user) return;
         axios.post('http://127.0.0.1:8000/api/myplans/', {}, { headers: { 'Authorization': "Token " + user.token } })
             .then(response => {
                 setPlans(response.data);

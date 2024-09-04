@@ -19,6 +19,7 @@ function Watchlater(){
 
 
     function fetchWatchlater() {
+        if (!user) return;
         axios.post('http://127.0.0.1:8000/api/watchlater/',{email:user.email},{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
             setMovies(response.data)
         })

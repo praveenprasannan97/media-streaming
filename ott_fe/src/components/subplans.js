@@ -13,9 +13,9 @@ function Subplans(){
     var [plans, setPlans]=useState([]);
     useEffect(()=>{
         fetchPlan()
-        console.log(order)
     },[order])
     function fetchPlan(){
+        if (!user) return;
         axios.post('http://127.0.0.1:8000/api/viewplans/',{},{headers:{'Authorization':"Token "+ user.token}}).then(response=>{
             setPlans(response.data)
         })

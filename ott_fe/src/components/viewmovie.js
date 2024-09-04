@@ -19,24 +19,23 @@ function Viewmovie(){
     }, []);  //[moviepk, user.token]);
 
     function fetchMovies() {
-        if(user){
-            axios.post('http://127.0.0.1:8000/api/viewmovie/', { moviepk }, {
-                headers: {
-                    'Authorization': `Token ${user.token}`,
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => {
-                setMovies(response.data);
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-                if (error.response && error.response.status === 401) {
-                    console.error('Unauthorized access');
-                    navigate('/login');
-                }
-            });
-        }
+        if (!user) return;
+        axios.post('http://127.0.0.1:8000/api/viewmovie/', { moviepk }, {
+            headers: {
+                'Authorization': `Token ${user.token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            setMovies(response.data);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+            if (error.response && error.response.status === 401) {
+                console.error('Unauthorized access');
+                navigate('/login');
+            }
+        });
     }
 
     function addlater(email, movie_id){

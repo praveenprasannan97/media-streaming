@@ -17,6 +17,7 @@ function Playmovie(){
     }, [user.token]);   // [moviepk, user.token]);
 
     function fetchMovies() {
+        if (!user) return;
         axios.post('http://127.0.0.1:8000/api/viewmovie/', { moviepk }, {
             headers: {
                 'Authorization': `Token ${user.token}`,
